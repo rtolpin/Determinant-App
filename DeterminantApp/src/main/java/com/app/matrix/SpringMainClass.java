@@ -13,15 +13,5 @@ public class SpringMainClass {
 	public static void main(String[] args) throws Exception {
 		SpringApplication.run(SpringMainClass.class, args);
 	}
-//		ApplicationContext context = new ClassPathXmlApplicationContext("Beans.xml");
-//
-//		Matrix m = (Matrix)context.getBean("Matrix");
-//		
-//		int[] r1 = {2,3};
-//		int[] r2 = {4,5};
-//		m.addRow(r1);
-//		m.addRow(r2);
-//		
-//		m.printMatrix();
 
 }
