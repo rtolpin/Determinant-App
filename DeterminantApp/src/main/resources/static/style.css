@@ -1,0 +1,27 @@
+.input{
+    text-align: center;
+    border: 1px solid black;
+    width: 15rem;
+}
+
+.matrix-box{
+    width: 5rem;
+    height: 3rem;
+    font-size: 2rem;
+}
+
+.matrix_input_form{
+    margin-left: 10rem;
+    margin-top: 5rem;
+}
+
+ .matrix-submission{
+    margin-top: 2rem;
+} 
+
+.submit-matrix{
+    display: inline-block;
+    margin: 0 auto;
+    margin-top: 1rem;
+    width: 1rem;
+}  
