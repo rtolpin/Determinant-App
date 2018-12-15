@@ -10,9 +10,6 @@ class MatrixInput extends React.Component{
     }
 
     componentDidMount() {
-		// client({method: 'GET', path: '/api/hello'}).done(response => {
-        //     console.log(response);
-		// });
 	}
 
     setSize(e){
