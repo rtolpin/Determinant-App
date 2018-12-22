@@ -1,11 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-const client = require('./client.js');
 
 class MatrixInput extends React.Component{
     constructor(props){
         super(props);
-        this.state = {size: undefined, matrixVals: []};
+        this.state = {size: undefined, matrixVals: [], determinant: undefined};
         this.renderMatrixRows = this.renderMatrixRows.bind(this);
     }
 
@@ -15,7 +14,7 @@ class MatrixInput extends React.Component{
     setSize(e){
         const newSize = e.target.value;
         if(newSize === ""){
-            this.setState({size: undefined, matrixVals: []});
+            this.setState({size: undefined, matrixVals: [], determinant: undefined});
         }else if(!isNaN(newSize)){
             this.setState({size: Number(newSize)});
         }
@@ -79,7 +78,16 @@ class MatrixInput extends React.Component{
             console.log("form was not submitted");
             return false;
         }
+        const url = 'http://localhost:8080/post/matrix';
         console.log("form was submitted");
+        fetch(url, {method: 'POST', headers: {'Content-Type': 'application/x-www-form-urlencoded'}, body: "size=" + this.state.size + "&matrix=" + JSON.stringify(this.state.matrixVals)})
+        .then(res => res.json())
+        .then(response =>{ 
+            console.log("Success:", JSON.stringify(response));
+            console.log(response["determinant"]);
+            this.setState({"determinant": response["determinant"]});
+        })
+        .catch(error => console.log("Error:", error));
         return true;
     }
 
@@ -93,6 +101,7 @@ class MatrixInput extends React.Component{
                     </label>
                     {this.state.size > 0 && this.state.size % 1 === 0 && <Matrix size={this.state.size} renderMatrixRows={this.renderMatrixRows} />}
                 </form>
+                {this.state.determinant ? <Determinant determinant={this.state.determinant}/> : null}
             </div>
         );
     }
@@ -106,9 +115,18 @@ function Matrix(props){
     return( 
         <div className="matrix-submission">
            <div>{rows.map((ele, i)=>props.renderMatrixRows(ele,i))}</div>
-            <div className="submit-matrix">
-            <input type="submit" className="btn btn-primary btn-sm" value="Submit Matrix" /> 
+           <div className="submit-matrix">
+                <input type="submit" className="btn btn-primary btn-sm" value="Submit Matrix" /> 
             </div>  
+        </div>
+    );
+}
+
+function Determinant(props){
+    return(
+        <div className="result">
+            <p className="text">Determinant:</p>
+            <p className="determinant">{props.determinant}</p> 
         </div>
     );
 }

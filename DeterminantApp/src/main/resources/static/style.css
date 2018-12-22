@@ -10,8 +10,11 @@
     font-size: 2rem;
 }
 
-.matrix_input_form{
+.matrix_input_form, .result {
     margin-left: 10rem;
+}
+
+.matrix_input_form {
     margin-top: 5rem;
 }
 
@@ -24,4 +27,22 @@
     margin: 0 auto;
     margin-top: 1rem;
     width: 1rem;
-}  
+} 
+
+.result{
+    width: auto;
+    margin-top: 1rem;
+}
+
+.text{
+    font-size: 1.5rem;
+    display: inline;
+    margin-left: 1rem;
+}
+
+.determinant{
+    font-size: 2rem;
+    display: inline;
+    margin-left: 0.5rem;
+    color: darkgreen;
+}
