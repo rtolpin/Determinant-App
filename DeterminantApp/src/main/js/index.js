@@ -101,7 +101,7 @@ class MatrixInput extends React.Component{
                     </label>
                     {this.state.size > 0 && this.state.size % 1 === 0 && <Matrix size={this.state.size} renderMatrixRows={this.renderMatrixRows} />}
                 </form>
-                {this.state.determinant ? <Determinant determinant={this.state.determinant}/> : null}
+                {!isNaN(this.state.determinant) ? <Determinant determinant={this.state.determinant}/> : null}
             </div>
         );
     }
@@ -132,3 +132,4 @@ function Determinant(props){
 }
 
 ReactDOM.render(<MatrixInput/>, document.getElementById('root'));
+
