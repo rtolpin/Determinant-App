@@ -24,26 +24,9 @@ public class HomeController {
 		return "index";
 	}
 	
-	@RequestMapping(value="/something/chickens", method=RequestMethod.GET)
-	@ResponseBody
-	ResponseEntity<String> chicken() {
-		return ResponseEntity.status(200).body("these are Chickens.");
-	}
-	
-	@RequestMapping(value = "/ex/foos/{id}", method = RequestMethod.GET)
-	@ResponseBody
-	public String getFoosBySimplePathWithPathVariable(
-	  @PathVariable String id) {
-	    return "Get a specific Foo with id=" + id;
-	}
-	
 	@RequestMapping(value="/post/matrix", method = RequestMethod.POST)
 	@ResponseBody
 	public ResponseEntity<String> postMatrix(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		System.out.println(request.toString());
-		
-		System.out.println(request.getParameter("matrix"));
-		System.out.println(request.getParameter("size"));
 		
 		String matParam = request.getParameter("matrix");
 		String size = request.getParameter("size");
@@ -62,13 +45,9 @@ public class HomeController {
 			m.addRow(matRow);
 		}
 		
-		m.printMatrix();
-		
 		MatrixView mV = new MatrixView(m);
 		Calculations c = new Calculations();
 		int determinant = c.calculateDeterminant(mV);
-		
-		System.out.println(determinant);
 		
 		String resObj = "{\"success\":true, \"determinant\":" + Integer.toString(determinant) + "}";
 		return ResponseEntity.status(200).body(resObj);

@@ -10,7 +10,7 @@
     font-size: 2rem;
 }
 
-.matrix_input_form, .result {
+.matrix_input_form, .result, .form_info {
     margin-left: 10rem;
 }
 
@@ -29,7 +29,7 @@
     width: 1rem;
 } 
 
-.result{
+.result, .form_info{
     width: auto;
     margin-top: 1rem;
 }
@@ -45,4 +45,12 @@
     display: inline;
     margin-left: 0.5rem;
     color: darkgreen;
+}
+
+.error{
+    border: 2px solid red;
+}
+
+.error-message{
+    color: red;
 }

@@ -23160,7 +23160,9 @@ function (_React$Component) {
     _this.state = {
       size: undefined,
       matrixVals: [],
-      determinant: undefined
+      determinant: undefined,
+      isValidSize: undefined,
+      wasSubmitted: undefined
     };
     _this.renderMatrixRows = _this.renderMatrixRows.bind(_assertThisInitialized(_assertThisInitialized(_this)));
     return _this;
@@ -23173,27 +23175,66 @@ function (_React$Component) {
     key: "setSize",
     value: function setSize(e) {
       var newSize = e.target.value;
+      var form = document.getElementsByClassName('matrix_input_form')[0];
+      var sizeInput = document.getElementsByClassName('size-input')[0];
 
       if (newSize === "") {
+        if (this.state.isValidSize === false) {
+          var error = document.querySelector('.error-message.size');
+          form.removeChild(error);
+          sizeInput.classList.remove('error');
+        }
+
         this.setState({
           size: undefined,
           matrixVals: [],
-          determinant: undefined
+          determinant: undefined,
+          isValidSize: undefined
         });
-      } else if (!isNaN(newSize)) {
+      } else if (!isNaN(newSize) && newSize % 1 === 0 && newSize > 0 && newSize <= 10) {
+        if (this.state.isValidSize === false) {
+          var _error = document.querySelector('.error-message.size');
+
+          form.removeChild(_error);
+          sizeInput.classList.remove('error');
+        }
+
         this.setState({
-          size: Number(newSize)
+          size: parseInt(newSize, 10),
+          isValidSize: true
         });
+      } else {
+        if (!sizeInput.classList.contains('error')) {
+          sizeInput.classList.add('error');
+          var errorMessage = document.createElement('div');
+          errorMessage.className = "error-message size";
+          errorMessage.innerHTML = "Size Must be a Whole Number between 1-10!";
+          form.appendChild(errorMessage);
+          this.setState({
+            isValidSize: false
+          });
+        }
       }
     }
   }, {
     key: "addToMatrixVals",
     value: function addToMatrixVals(e) {
-      if (!isNaN(e.target.value) || e.target.value === "") {
+      var parentEle = e.target.parentNode;
+      var children = parentEle.childNodes;
+      var inputVals = Array.prototype.slice.call(children);
+
+      if (isNaN(e.target.value)) {
+        if (!e.target.classList.contains('error')) {
+          e.target.classList.add('error');
+        }
+      }
+
+      if (!isNaN(e.target.value)) {
+        if (e.target.classList.contains('error')) {
+          e.target.classList.remove('error');
+        }
+
         var matVals = this.state.matrixVals.slice();
-        var parentEle = e.target.parentNode;
-        var children = parentEle.childNodes;
-        var inputVals = Array.prototype.slice.call(children);
         var key = parentEle.id;
 
         if (matVals[key] === undefined) {
@@ -23213,11 +23254,9 @@ function (_React$Component) {
         }
 
         matVals[key] = row;
-        console.log(matVals);
         this.setState({
           matrixVals: matVals
         });
-        console.log(this.state.matrixVals);
       }
     }
   }, {
@@ -23236,6 +23275,7 @@ function (_React$Component) {
       }
 
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "matrix-row",
         key: key,
         id: key,
         onChange: function onChange(e) {
@@ -23252,6 +23292,9 @@ function (_React$Component) {
 
       if (!this.state.matrixVals.length || this.state.matrixVals.length !== this.state.size) {
         console.log("form was not submitted");
+        this.setState({
+          wasSubmitted: false
+        });
         return false;
       }
 
@@ -23260,7 +23303,6 @@ function (_React$Component) {
           return ele === "";
         });
       });
-      console.log(containsEmpty);
       var isBlankValues = false;
 
       for (var i = 0; i < containsEmpty.length; ++i) {
@@ -23272,11 +23314,17 @@ function (_React$Component) {
 
       if (isBlankValues) {
         console.log("form was not submitted");
+        this.setState({
+          wasSubmitted: false
+        });
         return false;
       }
 
       var url = 'http://localhost:8080/post/matrix';
       console.log("form was submitted");
+      this.setState({
+        wasSubmitted: true
+      });
       fetch(url, {
         method: 'POST',
         headers: {
@@ -23287,7 +23335,6 @@ function (_React$Component) {
         return res.json();
       }).then(function (response) {
         console.log("Success:", JSON.stringify(response));
-        console.log(response["determinant"]);
 
         _this3.setState({
           "determinant": response["determinant"]
@@ -23314,12 +23361,14 @@ function (_React$Component) {
         onChange: function onChange(e) {
           return _this4.setSize(e);
         }
-      })), this.state.size > 0 && this.state.size % 1 === 0 && react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Matrix, {
+      })), this.state.isValidSize ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Matrix, {
         size: this.state.size,
         renderMatrixRows: this.renderMatrixRows
-      })), this.state.determinant ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Determinant, {
+      }) : null), !isNaN(this.state.determinant) && this.state.wasSubmitted ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Determinant, {
         determinant: this.state.determinant
-      }) : null);
+      }) : null, this.state.wasSubmitted === false ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
+        className: "form_info error-message"
+      }, "Matrix was not submitted.") : null);
     }
   }]);
 
@@ -23330,14 +23379,15 @@ function Matrix(props) {
   var rows = [];
 
   for (var i = 0; i < props.size; ++i) {
-    rows.push(react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-      className: "matrix-row"
-    }));
+    rows.push(i);
   }
 
   return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "matrix-submission"
-  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, rows.map(function (ele, i) {
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: "matrix",
+    id: "matrix"
+  }, rows.map(function (ele, i) {
     return props.renderMatrixRows(ele, i);
   })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "submit-matrix"
