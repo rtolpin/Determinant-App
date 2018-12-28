@@ -8,8 +8,10 @@ Frontend:
 4. Send Matrix values to backend to calculate determinant.
 
 Backend:
-1. Creates new Matrix Object
-2. Creates new instances of MatrixView to calculate determinant recursively
+1. Gets Matrix and size of Matrix passed as parameters in POST request body 
+2. Creates new Matrix Object
+3. Creates new instances of MatrixView to calculate determinant recursively
+4. Returns calculated Determinant in Response Body
 
 Build:
 1. Uses Webpack to build the application, and serve the dynamic JavaScript to load React
