@@ -50,6 +50,17 @@ public class Matrix {
 		}
 	}
 	
+	public void addColumn(int[] newCol, int colNum) throws Exception {
+		if(newCol.length != rows)
+			throw new Exception("Error: Column must be of length " + rows);
+		if(colNum > (columns - 1)) {
+			throw new Exception("Error: column number is out of bounds " + colNum);
+		}
+		for(int i = 0; i < rows; ++i) {
+			matrix[i][colNum] = newCol[i];
+		}
+	}
+	
 	public void printMatrix() {
 		for(int[] row: matrix) {
 			System.out.print(Arrays.toString(row) + "\n");
