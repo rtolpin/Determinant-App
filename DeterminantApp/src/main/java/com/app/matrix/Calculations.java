@@ -5,10 +5,10 @@ import java.io.*;
 
 public class Calculations {
 	
-	public int calculateDeterminant(MatrixView mView) throws Exception {
+	public double calculateDeterminant(MatrixView mView) throws Exception {
 		int numCols = mView.getColumns();
 		int s = 1;
-		int sum = 0;
+		double sum = 0;
 		if(numCols == 1)
 			sum = mView.getElement(0, 0);
 		else {

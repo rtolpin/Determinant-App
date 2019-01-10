@@ -32,7 +32,7 @@ public class MatrixView {
 		return copyView;
 	}
 	
-	public int getElement(int row, int col) {
+	public double getElement(int row, int col) {
 		return matrix.getElement(RIndex.get(row), CIndex.get(col));
 	}
 	
